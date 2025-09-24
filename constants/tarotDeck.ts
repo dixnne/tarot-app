@@ -1,0 +1,26 @@
+import { TarotCardType } from '../types';
+
+export const MAJOR_ARCANA: TarotCardType[] = [
+  { id: 0, name: 'El Loco', englishName: 'The Fool', emoji: '🤡' },
+  { id: 1, name: 'El Mago', englishName: 'The Magician', emoji: '🪄' },
+  { id: 2, name: 'La Suma Sacerdotisa', englishName: 'The High Priestess', emoji: '🔮' },
+  { id: 3, name: 'La Emperatriz', englishName: 'The Empress', emoji: '👑' },
+  { id: 4, name: 'El Emperador', englishName: 'The Emperor', emoji: '🏛️' },
+  { id: 5, name: 'El Hierofante', englishName: 'The Hierophant', emoji: '🙏' },
+  { id: 6, name: 'Los Enamorados', englishName: 'The Lovers', emoji: '❤️' },
+  { id: 7, name: 'El Carro', englishName: 'The Chariot', emoji: '🐎' },
+  { id: 8, name: 'La Fuerza', englishName: 'Strength', emoji: '🦁' },
+  { id: 9, name: 'El Ermitaño', englishName: 'The Hermit', emoji: '🏮' },
+  { id: 10, name: 'Rueda de la Fortuna', englishName: 'Wheel of Fortune', emoji: '🎡' },
+  { id: 11, name: 'La Justicia', englishName: 'Justice', emoji: '⚖️' },
+  { id: 12, name: 'El Colgado', englishName: 'The Hanged Man', emoji: '🌳' },
+  { id: 13, name: 'La Muerte', englishName: 'Death', emoji: '💀' },
+  { id: 14, name: 'La Templanza', englishName: 'Temperance', emoji: '⚗️' },
+  { id: 15, name: 'El Diablo', englishName: 'The Devil', emoji: '😈' },
+  { id: 16, name: 'La Torre', englishName: 'The Tower', emoji: '⚡️' },
+  { id: 17, name: 'La Estrella', englishName: 'The Star', emoji: '🌟' },
+  { id: 18, name: 'La Luna', englishName: 'The Moon', emoji: '🌙' },
+  { id: 19, name: 'El Sol', englishName: 'The Sun', emoji: '☀️' },
+  { id: 20, name: 'El Juicio', englishName: 'Judgement', emoji: '🎺' },
+  { id: 21, name: 'El Mundo', englishName: 'The World', emoji: '🌍' },
+];
