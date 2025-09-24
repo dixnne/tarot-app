@@ -28,5 +28,5 @@ export const SOUNDS = {
   CARD_FLIP: 'https://cdn.pixabay.com/audio/2022/03/15/audio_51c62f2324.mp3', // Magical shimmer
   TRANSITION: 'https://cdn.pixabay.com/audio/2022/02/08/audio_3c3b52994f.mp3', // Soft whoosh
   TEXT_APPEAR: 'https://cdn.pixabay.com/audio/2022/11/17/audio_821727c2f6.mp3', // Sparkle
-  NEXT_CLICK: 'https://cdn.pixabay.com/audio/2021/08/04/audio_573219f863.mp3', // Soft UI click
+  NEXT_CLICK: 'https://cdn.pixabay.com/audio/2022/03/15/audio_263482a823.mp3', // Soft UI click
 };

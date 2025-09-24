@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { SPREADS } from '../constants/tarotSpreads';
 import { TarotSpread } from '../types';
 
 interface WelcomeScreenProps {
+  spreads: TarotSpread[];
   onStart: (spread: TarotSpread, topic: string) => void;
+  onCustomSpreadClick: () => void;
 }
 
-const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
+const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ spreads, onStart, onCustomSpreadClick }) => {
   const [topic, setTopic] = useState('');
   const [selectedSpread, setSelectedSpread] = useState<TarotSpread | null>(null);
 
@@ -26,16 +27,25 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onStart }) => {
       <div className="w-full">
         <h2 className="text-2xl text-purple-200 font-serif mb-6">Elige una tirada</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-          {SPREADS.map((spread) => (
+          {spreads.map((spread) => (
             <div
               key={spread.key}
               onClick={() => setSelectedSpread(spread)}
-              className={`p-6 rounded-lg shadow-lg backdrop-blur-sm border transition-all duration-300 cursor-pointer ${selectedSpread?.key === spread.key ? 'bg-purple-600/90 border-purple-300 scale-105 shadow-purple-500/40' : 'bg-purple-900/50 border-purple-400/50 hover:bg-purple-800/70 hover:border-purple-400'}`}
+              className={`p-6 rounded-lg shadow-lg backdrop-blur-sm border transition-all duration-300 cursor-pointer flex flex-col text-left ${selectedSpread?.key === spread.key ? 'bg-purple-600/90 border-purple-300 scale-105 shadow-purple-500/40' : 'bg-purple-900/50 border-purple-400/50 hover:bg-purple-800/70 hover:border-purple-400'}`}
             >
               <h3 className="font-bold text-xl mb-2 font-serif">{spread.name}</h3>
-              <p className="text-base text-gray-300">{spread.description}</p>
+              <p className="text-base text-gray-300 flex-grow">{spread.description}</p>
             </div>
           ))}
+            <div
+              key="custom-creator"
+              onClick={onCustomSpreadClick}
+              className="p-6 rounded-lg shadow-lg backdrop-blur-sm border border-dashed border-purple-400/80 transition-all duration-300 cursor-pointer flex flex-col items-center justify-center text-center bg-purple-900/30 hover:bg-purple-800/50 hover:border-purple-400"
+            >
+              <div className="text-4xl mb-3 text-purple-300">✨</div>
+              <h3 className="font-bold text-xl mb-2 font-serif">Crear Tirada</h3>
+              <p className="text-base text-gray-300">Diseña tu propia lectura personalizada.</p>
+            </div>
         </div>
 
         {selectedSpread && (

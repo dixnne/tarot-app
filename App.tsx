@@ -6,6 +6,9 @@ import WelcomeScreen from './components/WelcomeScreen';
 import CardSelectionScreen from './components/CardSelectionScreen';
 import ReadingScreen from './components/ReadingScreen';
 import { playSound, SOUNDS } from './services/soundService';
+import { SPREADS as DEFAULT_SPREADS } from './constants/tarotSpreads';
+import { loadCustomSpreads, saveCustomSpreads } from './services/spreadService';
+import CustomSpreadCreator from './components/CustomSpreadCreator';
 
 // Fisher-Yates shuffle algorithm
 const shuffleDeck = <T,>(array: T[]): T[] => {
@@ -27,9 +30,19 @@ const App: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
+  const [customSpreads, setCustomSpreads] = useState<TarotSpread[]>([]);
+  const [isCreatingSpread, setIsCreatingSpread] = useState(false);
+  const [allSpreads, setAllSpreads] = useState<TarotSpread[]>(DEFAULT_SPREADS);
+
   useEffect(() => {
     setDeck(shuffleDeck(MAJOR_ARCANA));
+    const loadedSpreads = loadCustomSpreads();
+    setCustomSpreads(loadedSpreads);
   }, []);
+  
+  useEffect(() => {
+    setAllSpreads([...DEFAULT_SPREADS, ...customSpreads]);
+  }, [customSpreads]);
 
   const handleStart = (spread: TarotSpread, topic: string) => {
     playSound(SOUNDS.TRANSITION);
@@ -69,6 +82,18 @@ const App: React.FC = () => {
     }
   }, [isLoading, readings, selectedCards, readingTopic, selectedSpread]);
 
+  const handleAddSpread = (spreadData: Omit<TarotSpread, 'key'>) => {
+    const newSpread: TarotSpread = {
+      ...spreadData,
+      key: `custom-${Date.now()}`
+    };
+    const updatedSpreads = [...customSpreads, newSpread];
+    setCustomSpreads(updatedSpreads);
+    saveCustomSpreads(updatedSpreads);
+    setIsCreatingSpread(false);
+    playSound(SOUNDS.TRANSITION);
+  };
+
   const handleReset = () => {
     playSound(SOUNDS.TRANSITION);
     setGameState(GameState.Welcome);
@@ -79,14 +104,22 @@ const App: React.FC = () => {
     setReadingTopic('');
     setIsLoading(false);
     setError(null);
+    setIsCreatingSpread(false);
   };
 
   const renderContent = () => {
     switch (gameState) {
       case GameState.Welcome:
-        return <WelcomeScreen onStart={handleStart} />;
+        return <WelcomeScreen 
+          spreads={allSpreads} 
+          onStart={handleStart} 
+          onCustomSpreadClick={() => {
+            playSound(SOUNDS.NEXT_CLICK);
+            setIsCreatingSpread(true);
+          }} 
+        />;
       case GameState.Selecting:
-        if (!selectedSpread) return <WelcomeScreen onStart={handleStart} />;
+        if (!selectedSpread) return <WelcomeScreen spreads={allSpreads} onStart={handleStart} onCustomSpreadClick={() => setIsCreatingSpread(true)} />;
         return (
           <CardSelectionScreen
             deck={deck}
@@ -97,7 +130,7 @@ const App: React.FC = () => {
           />
         );
       case GameState.Reading:
-         if (!selectedSpread) return <WelcomeScreen onStart={handleStart} />;
+         if (!selectedSpread) return <WelcomeScreen spreads={allSpreads} onStart={handleStart} onCustomSpreadClick={() => setIsCreatingSpread(true)} />;
         return (
           <ReadingScreen
             spread={selectedSpread}
@@ -110,7 +143,7 @@ const App: React.FC = () => {
           />
         );
       default:
-        return <WelcomeScreen onStart={handleStart} />;
+        return <WelcomeScreen spreads={allSpreads} onStart={handleStart} onCustomSpreadClick={() => setIsCreatingSpread(true)} />;
     }
   };
 
@@ -118,6 +151,12 @@ const App: React.FC = () => {
     <div 
       className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-indigo-900 to-purple-900 bg-fixed flex items-center justify-center transition-all duration-500 overflow-hidden"
     >
+      {isCreatingSpread && (
+        <CustomSpreadCreator 
+          onSave={handleAddSpread}
+          onClose={() => setIsCreatingSpread(false)}
+        />
+      )}
       <main className="w-full h-full flex flex-col items-center justify-center">
         {renderContent()}
       </main>
